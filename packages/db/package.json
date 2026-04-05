@@ -1,0 +1,42 @@
+{
+  "name": "@witylogix/db",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./helpers": {
+      "types": "./src/helpers.ts",
+      "import": "./dist/helpers.js",
+      "default": "./dist/helpers.js"
+    }
+  },
+  "scripts": {
+    "build": "node -e \"try{require('fs').accessSync('src/generated/prisma/index.d.ts')}catch(e){process.exit(1)}\" || npx prisma generate --schema=./prisma/schema; tsc && node -e \"const{cpSync}=require('fs');try{cpSync('src/generated','dist/generated',{recursive:true})}catch{}\"",
+    "db:generate": "npx prisma generate --schema=./prisma/schema",
+    "db:migrate": "npx prisma migrate dev --schema=./prisma/schema",
+    "db:migrate:deploy": "npx prisma migrate deploy --schema=./prisma/schema",
+    "db:seed": "npx tsx prisma/seed.ts",
+    "db:studio": "npx prisma studio --schema=./prisma/schema",
+    "seed": "tsx src/seed.ts",
+    "validate-env": "tsx src/validate-env.ts",
+    "lint": "tsx scripts/check-rls-coverage.ts",
+    "lint:rls": "tsx scripts/check-rls-coverage.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^1.0.0"
+  }
+}
